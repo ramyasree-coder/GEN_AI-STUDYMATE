@@ -1,0 +1,15 @@
+# Pinned ranges chosen for broad compatibility with Python 3.11
+streamlit>=1.20.0,<2.0.0
+python-dotenv>=1.0.0,<2.0.0
+PyPDF2>=3.0.0,<4.0.0
+numpy>=1.23.0,<1.28.0
+requests>=2.28.0,<3.0.0
+# FAISS often requires platform-specific wheels; on Windows prefer conda install.
+# Try pip if you have a compatible wheel; otherwise follow the instructions in README.
+faiss-cpu>=1.7.0,<2.0.0
+
+# Optional: official Google GenAI SDK (current)
+# Install this if you want the client to use the official SDK instead of raw REST calls.
+google-genai>=0.3.0
+reportlab>=3.6.0
+
