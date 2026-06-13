@@ -342,17 +342,48 @@ class QAEngine:
         return self.client.generate_text(prompt)
 
     def generate_mcqs(self, topic: Optional[str] = None, n: int = 5) -> List[dict]:
-        prompt = "Create multiple-choice questions (4 options each) from the following context. Mark the correct answer." + "\n\n"
-        prompt += "\n\n".join(self.store._metadatas[:10])
-        prompt += "\n\nGenerate MCQs:"
+        # Build a grounded, structured prompt asking for JSON output to reduce hallucinations.
+        context = "\n\n".join(self.store._metadatas[:10])
+        prompt = (
+            "You are given the following CONTEXT extracted from a document. Create up to {n} multiple-choice "
+            "questions (4 options each) strictly based on the CONTEXT. Do NOT invent facts or add information "
+            "that is not present in the CONTEXT. If the answer cannot be determined from the CONTEXT, use the "
+            "string \"UNKNOWN\" for the answer.\n\n"
+        ).format(n=n)
+        prompt += "CONTEXT:\n" + context + "\n\n"
+        prompt += (
+            "Return the result as a JSON array of objects with keys: question (string), options (array of 4 strings), "
+            "answer (the exact option text that is correct). Example: [{\"question\":\"...\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":\"A\"}].\n"
+        )
+        prompt += "Only output valid JSON. Do not add any commentary.\n"
+
         out = self.client.generate_text(prompt, max_tokens=800)
-        # Very naive parsing: expect JSON or line-separated; fallback to one question
+        # Try to parse JSON strictly. If parsing fails, attempt to extract a JSON substring.
         try:
             parsed = json.loads(out)
-            return parsed
+            # Normalize to expected shape and cap to n
+            if isinstance(parsed, list):
+                return parsed[:n]
         except Exception:
-            # Build one dummy MCQ if parsing fails
-            return [{"question": out[:120], "options": ["A", "B", "C", "D"], "answer": "A"}]
+            # attempt to find JSON inside text
+            try:
+                import re
+
+                m = re.search(r"(\[\s*\{.*\}\s*\])", out, re.DOTALL)
+                if m:
+                    parsed = json.loads(m.group(1))
+                    if isinstance(parsed, list):
+                        return parsed[:n]
+            except Exception:
+                pass
+
+        # Fallback: return a single question constructed from the top of the output but mark answer UNKNOWN
+        snippet = out.strip().splitlines()
+        if snippet:
+            q = snippet[0][:200]
+        else:
+            q = "Generate MCQs"
+        return [{"question": q, "options": ["UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN"], "answer": "UNKNOWN"}]
 
     def generate_notes(self) -> str:
         prompt = "Create concise study notes from the following document. Use headings and bullet points." + "\n\n"

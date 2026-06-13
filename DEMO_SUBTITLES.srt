@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:20,000
+Hi — this is GenAI StudyMate, a student-focused assistant to turn PDFs into searchable notes, quizzes, and visual summaries. I’ll show core features in three minutes.
+
+2
+00:00:20,000 --> 00:00:40,000
+[Show Login/Register form] First I register a test user. Username: demo, Password: demo123. Now I log in as demo.
+
+3
+00:00:40,000 --> 00:01:05,000
+[Go to Upload → choose sample PDF → click Ingest] I’ve uploaded a sample PDF and clicked ingest. The app extracts text, chunks the document, and creates embeddings. FAISS index is initialized with the correct embedding dimension.
+
+4
+00:01:05,000 --> 00:01:30,000
+[Go to Chat → type a question from the PDF → Send] Now I’ll ask a question about the document: “What are the candidate’s top skills?” The assistant returns a concise, context-grounded answer sourced from the PDF.
+
+5
+00:01:30,000 --> 00:01:55,000
+[Go to Notes → Generate Notes → download PDF → open it] Next I generate study notes. The app produces titled bullet points and I download the notes as a PDF to demonstrate the export.
+
+6
+00:01:55,000 --> 00:02:20,000
+[Go to Explain → paste topic/text → choose WordCloud or Bar → Explain & Chart] Here I paste a short topic and select WordCloud. The app generates a student-friendly explanation and a visual summary showing top terms to aid comprehension.
+
+7
+00:02:20,000 --> 00:02:40,000
+[Sidebar → enter index name “midterm_notes” → Save Index] I save the FAISS index to my account under the name ‘midterm_notes’. This persists embeddings and chunks for quick reuse. [Optional: Logout and log back in → Sidebar → Load index ‘midterm_notes’] I can load the saved index instantly, restoring the searchable document space without reprocessing.
+
+8
+00:02:40,000 --> 00:03:00,000
+That’s GenAI StudyMate — upload, chat, visualize, and persist study materials. Limitations: image-generation depends on your GenAI account and SDK support; FAISS on Windows may need platform wheels. Next steps include automated tests, a short demo video, and deployment instructions. Thanks — that’s the demo.

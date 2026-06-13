@@ -1,5 +1,55 @@
 # GenAI StudyMate
 
+Student-focused Study assistant: upload PDFs, chat with documents, generate notes and quizzes, and visualize key concepts.
+
+Features
+- Register / Login (SQLite)
+- Upload PDF, extract text, chunking
+- Embeddings via Google GenAI SDK or REST fallback
+- FAISS vector store with per-user save/load
+- Chat with PDF (contextual QA)
+- Notes generation and download as PDF
+- MCQ generation (JSON-grounded)
+- Explain page with Pie/Bar/WordCloud charts
+
+Quick setup
+1. Create a Python 3.11 virtual environment and activate it.
+2. Install dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+3. Set your Gemini API key in a `.env` file next to `app.py`:
+
+```
+GEMINI_API_KEY=your_api_key_here
+```
+
+Run the app
+
+```powershell
+.venv\Scripts\streamlit.exe run app.py
+```
+
+Usage notes
+- Register a user, upload PDF on Upload page, ingest. Save index under a name in the sidebar.
+- Use Chat page to ask questions about uploaded documents.
+- Use Explain page for visual summaries (choose Pie/Bar/WordCloud).
+
+Development and tests
+- `e2e_run.py` demonstrates end-to-end ingestion, embedding, QA, notes, and MCQ generation.
+
+Project deliverables
+- Source code, `README.md`, demo script, example PDF, `e2e_run.py`, and a short demo video.
+
+Limitations & next steps
+- GenAI image-generation support depends on SDK and account permissions — implemented as guarded fallback.
+- Windows FAISS installation may require conda or platform-specific wheels.
+
+License: MIT
+# GenAI StudyMate
+
 GenAI StudyMate is a Streamlit dashboard for studying documents with the help of a generative AI. Upload PDFs, index their content into a FAISS vector store, and interact with the document to get answers, concise notes, quizzes, and key concepts.
 
 ## Features
